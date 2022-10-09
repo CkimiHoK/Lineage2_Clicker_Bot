@@ -1,5 +1,5 @@
 from support_functions import command_line_parser
-from logic.chronicles import chronicle_settings_factory
+from chronicles import chronicle_settings_factory
 from logic import bot_factory
 
 
