@@ -131,3 +131,6 @@ dmypy.json
 
 # Database files
 *.db
+
+# Project directories
+screenshots/
