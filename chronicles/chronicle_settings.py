@@ -1,9 +1,14 @@
 class Panel:
-    def __init__(self, anchor_image_path: str, panel_size: dict):
+    def __init__(self, anchor_image_path: str = "", panel_info=None):
+        if panel_info is None:
+            panel_info = dict()
+
         self.__anchor_image_path = anchor_image_path
-        self.__panel_size = panel_size
-        self.__x = None
-        self.__y = None
+        self.__panel_info = panel_info
+        self.__x = panel_info.get("x")
+        self.__y = panel_info.get("y")
+        self.__width = panel_info.get("width")
+        self.__height = panel_info.get("height")
 
     def set_start_point(self, x, y):
         self.__x = x
@@ -13,14 +18,13 @@ class Panel:
         return self.__anchor_image_path
 
     def get_size(self):
-        return self.__panel_size
+        return self.__width, self.__height
 
     def get_start_point(self):
         return self.__x, self.__y
 
     def get_end_point(self):
-        return self.__x + self.__panel_size["width"], \
-               self.__y + self.__panel_size["height"]
+        return self.__x + self.__width, self.__y + self.__height
 
     def get_x(self):
         return self.__x
@@ -29,10 +33,13 @@ class Panel:
         return self.__y
 
     def get_width(self):
-        return self.__panel_size["width"]
+        return self.__width
 
     def get_height(self):
-        return self.__panel_size["height"]
+        return self.__height
+
+    def get_region(self):
+        return self.__x, self.__y, self.__width, self.__height
 
 
 class ChronicleSettings:
