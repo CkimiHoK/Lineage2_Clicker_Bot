@@ -20,10 +20,10 @@ class DwarvenFighterBot(AbstractBot):
         self.get_drop(BUTTON_DROP)
 
     def fail_actions(self, fail_count: int):
-        if fail_count >= 3:
+        if fail_count >= 5:
             self.move_random_location()
             return True
-        elif 1 < fail_count < 3:
+        elif 1 < fail_count < 5:
             self.rotate_right()
             return False
         else:

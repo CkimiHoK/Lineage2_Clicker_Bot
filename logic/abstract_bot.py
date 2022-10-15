@@ -66,6 +66,7 @@ class AbstractBot(ABC):
                         break
                     elif target_hp >= 98 and tick >= 10:
                         print("we are stuck...move random")
+                        pyautogui.press("esc")
                         self.move_random_location()
                         break
                 return True
