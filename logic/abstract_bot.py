@@ -31,11 +31,6 @@ class AbstractBot(ABC):
             chronicle_settings.get_target_panel()
         )
 
-        self.__target_panel = panel_info_filler.fill_panel_start_coords(
-            self.__main_window_panel,
-            chronicle_settings.get_target_panel()
-        )
-
     def go(self):
         print("run loop...")
 
@@ -53,10 +48,12 @@ class AbstractBot(ABC):
             if self.fail_actions(fail_count):
                 fail_count = 0
 
+        print("bot stopped")
+
     def attack_target(self, button_attack_value: str):
         mob_x, mob_y = self.get_target()
         if mob_x is not None and mob_y is not None:
-            self.left_click(mob_x, mob_y)
+            self.left_click_no_move(mob_x, mob_y)
 
             if self.get_target_hp() >= 98:
                 pyautogui.press(button_attack_value)
@@ -106,6 +103,11 @@ class AbstractBot(ABC):
         pyautogui.moveTo(x=x_pos, y=y_pos, duration=0.2)
         pyautogui.mouseDown()
         pyautogui.mouseUp()
+
+    def left_click_no_move(self, x_pos, y_pos):
+        pyautogui.keyDown("shift")
+        self.left_click(x_pos, y_pos)
+        pyautogui.keyUp("shift")
 
     def get_drop(self, button_drop_value: str, try_count=3):
         for _ in range(try_count):
