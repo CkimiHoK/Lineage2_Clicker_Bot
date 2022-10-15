@@ -8,6 +8,7 @@ BUTTON_ATTACK = "1"
 class DwarvenFighterBot(AbstractBot):
     def actions_before_main(self):
         if self.get_self_hp() < 60:
+            print("we need to relax")
             self.sit_until_heal(BUTTON_SIT)
             return True
         return False

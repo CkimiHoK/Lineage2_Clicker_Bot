@@ -57,16 +57,23 @@ class AbstractBot(ABC):
 
             if self.get_target_hp() >= 98:
                 pyautogui.press(button_attack_value)
+                tick = 0
                 while True:
                     pyautogui.sleep(1)
-                    if self.get_target_hp() <= 0:
+                    tick += 1
+                    target_hp = self.get_target_hp()
+                    if target_hp <= 0:
+                        break
+                    elif target_hp >= 98 and tick >= 10:
+                        print("we are stuck...move random")
+                        self.move_random_location()
                         break
                 return True
             else:
-                print("ERROR: target is not MOB")
+                print("target is not MOB")
                 return False
         else:
-            print("ERROR: can't found target")
+            print("can't found target")
             return False
 
     def get_target(self):
@@ -111,7 +118,7 @@ class AbstractBot(ABC):
 
     def get_drop(self, button_drop_value: str, try_count=3):
         for _ in range(try_count):
-            pyautogui.sleep(0.2)
+            pyautogui.sleep(0.5)
             pyautogui.press(button_drop_value)
 
     def move_random_location(self):

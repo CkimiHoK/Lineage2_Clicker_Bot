@@ -57,6 +57,7 @@ def find_target(image_path: str):
     image[0:70, 0:355] = (0, 0, 0)  # HEALTH_BAR y_from:y_to x_from:x_to
     image[720:900, 0:355] = (0, 0, 0)  # CHAT y_from:y_to x_from:x_to
     image[350:600, 750:850] = (0, 0, 0)  # AVATAR y_from:y_to x_from:x_to
+    image[865:900, 600:1000] = (0, 0, 0)  # SKILL_PANEL y_from:y_to x_from:x_to
 
     image = exclude_targeted(image)
 
