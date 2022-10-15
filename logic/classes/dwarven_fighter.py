@@ -21,7 +21,7 @@ class DwarvenFighterBot(AbstractBot):
 
     def fail_actions(self, fail_count: int):
         if fail_count >= 5:
-            self.move_random_location()
+            # self.move_random_location()  # COMMENT THIS STRING IF OT NEED MOVE
             return True
         elif 1 < fail_count < 5:
             self.rotate_right()

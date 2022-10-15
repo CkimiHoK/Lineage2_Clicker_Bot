@@ -72,7 +72,7 @@ class AbstractBot(ABC):
                 return True
             else:
                 print("target is not MOB")
-                return False
+                return True
         else:
             print("can't found target")
             return False

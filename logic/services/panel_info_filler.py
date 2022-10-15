@@ -11,7 +11,7 @@ def fill_panel_start_coords(main_window_panel: Panel, panel: Panel):
     try:
         loc = pyautogui.locateOnScreen(
             panel.get_anchor_image_path(),
-            confidence=0.9,
+            confidence=0.70,  # TODO return to 0.9 after fix HEALTH anchor
             region=main_window_panel.get_region()
         )
         panel.set_start_point(
