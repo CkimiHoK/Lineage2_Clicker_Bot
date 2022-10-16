@@ -7,7 +7,7 @@ BUTTON_ATTACK = "1"
 
 class DwarvenFighterBot(AbstractBot):
     def actions_before_main(self):
-        if self.get_self_hp() < 60:
+        if self.get_self_hp() < 50:
             print("we need to relax")
             self.sit_until_heal(BUTTON_SIT)
             return True
@@ -21,7 +21,7 @@ class DwarvenFighterBot(AbstractBot):
 
     def fail_actions(self, fail_count: int):
         if fail_count >= 5:
-            # self.move_random_location()  # COMMENT THIS STRING IF OT NEED MOVE
+            self.move_random_location()  # COMMENT THIS STRING IF NOT NEED MOVE
             return True
         elif 1 < fail_count < 5:
             self.rotate_right()

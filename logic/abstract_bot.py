@@ -117,7 +117,7 @@ class AbstractBot(ABC):
         self.left_click(x_pos, y_pos)
         pyautogui.keyUp("shift")
 
-    def get_drop(self, button_drop_value: str, try_count=3):
+    def get_drop(self, button_drop_value: str, try_count=4):
         for _ in range(try_count):
             pyautogui.sleep(0.5)
             pyautogui.press(button_drop_value)
@@ -126,10 +126,11 @@ class AbstractBot(ABC):
         random_x_loc = random.randint(350, 1400)
         random_y_loc = random.randint(100, 700)
         self.left_click(random_x_loc, random_y_loc)
+        pyautogui.sleep(0.5)
 
     def rotate_right(self):
         pyautogui.keyDown("d")
-        pyautogui.sleep(0.6)
+        pyautogui.sleep(0.8)
         pyautogui.keyUp("d")
 
     def use_skill(self, button_skill_value: str):
