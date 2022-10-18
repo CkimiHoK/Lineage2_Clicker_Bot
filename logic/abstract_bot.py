@@ -50,34 +50,47 @@ class AbstractBot(ABC):
 
         print("bot stopped")
 
-    def attack_target(self, button_attack_value: str):
-        mob_x, mob_y = self.get_target()
-        if mob_x is not None and mob_y is not None:
-            self.left_click_no_move(mob_x, mob_y)
-
-            if self.get_target_hp() >= 98:
-                pyautogui.press(button_attack_value)
-                tick = 0
-                while True:
-                    pyautogui.sleep(1)
-                    tick += 1
-                    target_hp = self.get_target_hp()
-                    if target_hp <= 0:
-                        break
-                    elif target_hp >= 98 and tick >= 10:
-                        print("we are stuck...move random")
-                        pyautogui.press("esc")
-                        self.move_random_location()
-                        break
-                return True
-            else:
-                print("target is not MOB")
-                return True
+    def set_target_and_attack(self, button_attack_value: str, button_nearest_value: str):
+        if self.get_nearest_target(button_nearest_value):
+            return self.attack_target(button_attack_value)
         else:
-            print("can't found target")
-            return False
+            mob_x, mob_y = self.get_target_on_screen()
+            if mob_x is not None and mob_y is not None:
+                self.left_click_no_move(mob_x, mob_y)
+                return self.attack_target(button_attack_value)
+            else:
+                return False
 
-    def get_target(self):
+    def attack_target(self, button_attack_value: str):
+        if self.get_target_hp() >= 98:
+            pyautogui.press(button_attack_value)
+            tick = 0
+            while True:
+                pyautogui.sleep(0.5)
+                tick += 1
+                target_hp = self.get_target_hp()
+                avatar_hp = self.get_self_hp()
+                if target_hp <= 0:
+                    self.actions_on_target_death()
+                    break
+                elif target_hp >= 98 and tick >= 20:
+                    print("WARN: We are STUCK")
+                    pyautogui.press("esc")
+                    self.move_random_location()
+                    break
+                else:
+                    self.actions_while_attack(target_hp, avatar_hp)
+            return True
+        else:
+            print("target is not MOB")
+            return True
+
+    def get_nearest_target(self, button_nearest_value: str):
+        pyautogui.press(button_nearest_value)
+        pyautogui.sleep(0.3)
+        return self.get_target_hp() >= 98
+
+    def get_target_on_screen(self):
         pyautogui.screenshot(
             GAME_WINDOW_SCREENSHOT_NAME,
             region=self.__main_window_panel.get_region()
@@ -100,12 +113,20 @@ class AbstractBot(ABC):
 
     def sit_until_heal(self, button_sit_value: str):
         pyautogui.press(button_sit_value)
+        metric_heal = 0
         while True:
             pyautogui.sleep(1)
+            current_heal = self.get_self_hp()
+            if current_heal < metric_heal:
+                print("WARN: We are UNDER ATTACK !!!")
+                return False
+            else:
+                metric_heal = current_heal
             if self.get_self_hp() > 95:
                 break
         pyautogui.press(button_sit_value)
         pyautogui.sleep(2)
+        return True
 
     def left_click(self, x_pos, y_pos):
         pyautogui.moveTo(x=x_pos, y=y_pos, duration=0.2)
@@ -150,4 +171,12 @@ class AbstractBot(ABC):
 
     @abstractmethod
     def fail_actions(self, fail_count: int):
+        pass
+
+    @abstractmethod
+    def actions_while_attack(self, target_hp: int, self_hp: int):
+        pass
+
+    @abstractmethod
+    def actions_on_target_death(self):
         pass
